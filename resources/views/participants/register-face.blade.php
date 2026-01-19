@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Registrasi Wajah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .pulse-animation {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <!-- Header -->
+    <div class="sticky top-0 z-10 bg-white shadow-sm">
+        <div class="flex items-center max-w-lg gap-4 px-4 py-4 mx-auto">
+            <button onclick="window.history.back()" class="p-2 transition-colors rounded-lg hover:bg-slate-100">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800">Registrasi Wajah</h1>
+                    <p class="text-xs text-slate-500">Verifikasi identitas Anda</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-lg px-4 py-6 pb-8 mx-auto">
+        <!-- Camera Container -->
+        <div id="face-app" data-peserta-id="{{ $peserta->id }}" class="mb-6 overflow-hidden bg-white shadow-xl rounded-3xl">
+            <div class="relative bg-slate-900 aspect-[3/4] sm:aspect-[4/5]">
+                <!-- Video Element -->
+                <video id="video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1]"></video>
+
+                <!-- Face Guide Overlay -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="relative">
+                        <!-- Main oval guide with dynamic border color -->
+                        <div id="faceGuide" class="w-48 h-64 transition-all duration-300 border-4 rounded-full sm:w-56 sm:h-72 border-slate-300" style="border-style: dashed"></div>
+
+                        <!-- Corner guides -->
+                        <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-2xl"></div>
+                        <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-2xl"></div>
+                        <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-2xl"></div>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white rounded-br-2xl"></div>
+                    </div>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loadingOverlay" class="absolute inset-0 items-center justify-center hidden bg-black/70 backdrop-blur-sm">
+                    <div class="text-center">
+                        <div class="relative w-20 h-20 mx-auto mb-4">
+                            <div class="absolute inset-0 border-4 rounded-full border-white/20"></div>
+                            <div class="absolute inset-0 border-4 border-white rounded-full border-t-transparent spinner"></div>
+                        </div>
+                        <p class="text-lg font-semibold text-white">Memproses...</p>
+                        <p class="mt-1 text-sm text-white/70">Mendaftarkan wajah Anda</p>
+                    </div>
+                </div>
+
+                <!-- Camera Not Ready Overlay -->
+                <div id="cameraLoadingOverlay" class="absolute inset-0 flex items-center justify-center bg-slate-900">
+                    <div class="text-center text-white">
+                        <div class="w-16 h-16 mx-auto mb-4 border-4 rounded-full border-white/30 border-t-white spinner"></div>
+                        <p class="font-medium">Memuat kamera...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div id="statusBar" class="p-4 border-t-2 bg-slate-50 border-slate-300">
+                <div class="flex items-center justify-center gap-3">
+                    <svg id="statusIcon" class="w-6 h-6 text-slate-600 pulse-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <p id="statusText" class="font-semibold text-center text-slate-600">Mencari wajah...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="p-6 bg-white shadow-lg rounded-2xl">
+            <div class="flex items-start gap-3 mb-4">
+                <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-blue-100 rounded-xl">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="mb-1 font-semibold text-slate-800">Panduan Pengambilan</h3>
+                    <p class="text-sm text-slate-600">Ikuti langkah berikut untuk hasil terbaik</p>
+                </div>
+            </div>
+
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3 text-sm text-slate-700">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs font-bold text-blue-600">1</span>
+                    </div>
+                    <span>Posisikan wajah di tengah oval panduan</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-slate-700">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs font-bold text-blue-600">2</span>
+                    </div>
+                    <span>Pastikan pencahayaan cukup dan merata</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-slate-700">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs font-bold text-blue-600">3</span>
+                    </div>
+                    <span>Lepas kacamata, topi, atau masker</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm text-slate-700">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs font-bold text-blue-600">4</span>
+                    </div>
+                    <span>Tunggu hingga sistem mendeteksi posisi ideal</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div class="p-4 mt-4 border bg-slate-50 rounded-xl border-slate-200">
+            <p class="text-xs text-center text-slate-600">
+                <svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                Data wajah Anda akan dienkripsi dan disimpan dengan aman sesuai kebijakan privasi
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const faceGuide = document.getElementById('faceGuide');
+        const statusBar = document.getElementById('statusBar');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const cameraLoadingOverlay = document.getElementById('cameraLoadingOverlay');
+
+        let cameraReady = false;
+        let isCapturing = false;
+        let isProcessing = false;
+        let currentStream = null;
+        let checkInterval = null;
+
+        // Status Configuration
+        const statusConfig = {
+            searching: {
+                text: 'Mencari wajah...',
+                color: 'text-slate-600',
+                bgColor: 'bg-slate-50',
+                borderColor: 'border-slate-300',
+                iconPath: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+            },
+            too_far: {
+                text: 'Wajah terlalu jauh',
+                color: 'text-orange-600',
+                bgColor: 'bg-orange-50',
+                borderColor: 'border-orange-400',
+                iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+            },
+            too_close: {
+                text: 'Wajah terlalu dekat',
+                color: 'text-orange-600',
+                bgColor: 'bg-orange-50',
+                borderColor: 'border-orange-400',
+                iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+            },
+            too_dark: {
+                text: 'Pencahayaan terlalu gelap',
+                color: 'text-indigo-600',
+                bgColor: 'bg-indigo-50',
+                borderColor: 'border-indigo-400',
+                iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+            },
+            too_bright: {
+                text: 'Terlalu terang',
+                color: 'text-yellow-600',
+                bgColor: 'bg-yellow-50',
+                borderColor: 'border-yellow-400',
+                iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+            },
+            good: {
+                text: 'Posisi ideal',
+                color: 'text-green-600',
+                bgColor: 'bg-green-50',
+                borderColor: 'border-green-400',
+                iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+            }
+        };
+
+        // Initialize Camera
+        async function initCamera() {
+            try {
+                console.log('Requesting camera access...');
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    }
+                });
+
+                console.log('Camera access granted');
+                currentStream = stream;
+                video.srcObject = stream;
+
+                video.onloadedmetadata = () => {
+                    console.log('Video metadata loaded');
+                    cameraReady = true;
+                    cameraLoadingOverlay.classList.add('hidden');
+                    video.play().then(() => {
+                        console.log('Video playing');
+                        // Mulai face check setelah 1 detik untuk memastikan video sudah stabil
+                        setTimeout(() => {
+                            startFaceCheck();
+                        }, 1000);
+                    }).catch(err => {
+                        console.error('Video play error:', err);
+                        showError('Gagal memutar video kamera');
+                    });
+                };
+            } catch (err) {
+                console.error('Camera error:', err);
+                cameraLoadingOverlay.innerHTML = `
+                    <div class="p-4 text-center text-white">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <p class="mb-2 font-medium">Akses Kamera Ditolak</p>
+                        <p class="mb-4 text-sm text-white/70">${err.message || 'Pastikan izin kamera telah diberikan'}</p>
+                        <button onclick="location.reload()" class="px-4 py-2 transition-colors bg-blue-600 rounded-lg hover:bg-blue-700">
+                            Coba Lagi
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Capture Frame
+        function captureFrame() {
+            if (!video.videoWidth || !video.videoHeight) return null;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            ctx.restore();
+
+            return canvas.toDataURL('image/jpeg', 0.8);
+        }
+
+        // Update Status UI
+        function updateStatus(status, customMessage = null) {
+            const config = statusConfig[status] || statusConfig.searching;
+
+            statusBar.className = `p-4 border-t-2 ${config.bgColor} ${config.borderColor}`;
+            statusText.className = `font-semibold ${config.color} text-center`;
+            statusText.textContent = customMessage || config.text;
+
+            faceGuide.className = `w-48 h-64 sm:w-56 sm:h-72 border-4 rounded-full transition-all duration-300 ${config.borderColor}`;
+
+            statusIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${config.iconPath}"/>`;
+            statusIcon.className = `w-6 h-6 ${config.color} pulse-animation`;
+        }
+
+        // Check Face via API
+        async function checkFace() {
+            if (!cameraReady || isProcessing || isCapturing) return;
+
+            const image = captureFrame();
+            if (!image) return;
+
+            try {
+                const response = await fetch('/peserta/face-check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    body: JSON.stringify({ image })
+                });
+
+                const data = await response.json();
+
+                updateStatus(data.status, data.message);
+
+                // Auto-capture when face is in good position
+                if (data.status === 'good' && data.can_register && !isCapturing) {
+                    stopFaceCheck();
+                    await startAutoCapture();
+                }
+            } catch (err) {
+                console.error('Face check error:', err);
+                updateStatus('searching');
+            }
+        }
+
+        // Start Face Check Loop
+        function startFaceCheck() {
+            if (checkInterval) clearInterval(checkInterval);
+            checkInterval = setInterval(checkFace, 1200);
+        }
+
+        // Stop Face Check Loop
+        function stopFaceCheck() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+        }
+
+        // Auto Multi-Capture (5 images)
+        async function startAutoCapture() {
+            if (isCapturing) return;
+
+            isCapturing = true;
+            const images = [];
+            let count = 0;
+
+            updateStatus('good', 'Mengambil foto... Tetap diam!');
+
+            const captureInterval = setInterval(() => {
+                const img = captureFrame();
+                if (img) {
+                    images.push(img);
+                    count++;
+                }
+
+                if (count >= 5) {
+                    clearInterval(captureInterval);
+                    isCapturing = false;
+                    registerFace(images);
+                }
+            }, 350);
+        }
+
+        // Register Face to Server
+        async function registerFace(images) {
+            const pesertaId = document.getElementById('face-app') ?.dataset ?.pesertaId;
+
+            if (!pesertaId) {
+                console.error('Peserta ID tidak ditemukan');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Peserta tidak terdeteksi',
+                });
+                return; // ✅ AMAN
+            }
+
+            isProcessing = true;
+            loadingOverlay.classList.remove('hidden');
+
+            try {
+
+                const response = await fetch(`/peserta/${pesertaId}/face-register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    body: JSON.stringify({ face_images: images })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registrasi Berhasil!',
+                        html: `
+                            <div class="text-center">
+                                <p class="mb-2 text-lg font-semibold text-slate-800">Wajah Berhasil Diregistrasi</p>
+                                <p class="text-sm text-slate-600">Data wajah Anda telah tersimpan dengan aman</p>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: '<svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Lanjut Presensi',
+                        cancelButtonText: '<svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Kembali ke Beranda',
+                        confirmButtonColor: '#2563eb',
+                        cancelButtonColor: '#64748b',
+                        reverseButtons: true,
+                        allowOutsideClick: false,
+                        customClass: {
+                            popup: 'rounded-2xl',
+                            confirmButton: 'px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all',
+                            cancelButton: 'px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect ke halaman presensi dengan pesertaId yang sudah di-set
+                            const redirectUrl = `/peserta/presensi/${pesertaId}`;
+                            console.log('Redirecting to:', redirectUrl); // Debug
+                            window.location.href = redirectUrl;
+                        } else {
+                            // Redirect ke beranda
+                            window.location.href = '/';
+                        }
+                    });
+                } else {
+                    throw new Error(data.message || 'Registrasi gagal');
+                }
+            } catch (err) {
+                console.error('Register error:', err);
+                loadingOverlay.classList.add('hidden');
+                isProcessing = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: err.message || 'Registrasi wajah gagal',
+                    confirmButtonColor: '#dc2626'
+                }).then(() => {
+                    startFaceCheck();
+                });
+            }
+        }
+
+        // Show Error Alert
+        function showError(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+                confirmButtonColor: '#dc2626'
+            });
+        }
+
+        // Cleanup
+        function cleanup() {
+            stopFaceCheck();
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initCamera);
+        window.addEventListener('beforeunload', cleanup);
+    </script>
+</body>
+</html>
