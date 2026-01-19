@@ -20,22 +20,22 @@ class PresensiPesertaController extends Controller
     {
         $now = now();
 
-        // 1️⃣ Ambil presensi AKTIF & VALID WAKTU
+
         $activeSetting = AttendanceSetting::where('is_active', true)
             ->where('start_time', '<=', $now)
             ->where('end_time', '>=', $now)
             ->first();
 
-        // 2️⃣ Ambil peserta
+
         $participants = Participants::select('id', 'name', 'face_images')
             ->with([
                 'attendances' => function ($q) use ($activeSetting) {
 
-                    // PENTING: filter attendance HANYA sesi aktif
+
                     if ($activeSetting) {
                         $q->where('attendances_setting_id', $activeSetting->id);
                     } else {
-                        // Supaya attendances kosong (tidak kebaca presensi lama)
+
                         $q->whereRaw('1 = 0');
                     }
                 }
@@ -87,9 +87,9 @@ class PresensiPesertaController extends Controller
 
             $decoded = json_decode($raw, true);
 
-            // ================================
-            // Guard: response bukan JSON
-            // ================================
+
+
+
             if (!is_array($decoded)) {
                 return response()->json([
                     'status' => 'searching',
@@ -98,9 +98,9 @@ class PresensiPesertaController extends Controller
                 ]);
             }
 
-            // ================================
-            // NORMALISASI STATUS
-            // ================================
+
+
+
             $statusMap = [
                 'searching'        => 'searching',
                 'too_far'          => 'too_far',
@@ -109,7 +109,7 @@ class PresensiPesertaController extends Controller
                 'too_bright'       => 'too_bright',
                 'good'             => 'good',
 
-                // alias / variasi
+
                 'ok'               => 'good',
                 'face_ok'          => 'good',
                 'face_too_far'     => 'too_far',
@@ -182,7 +182,7 @@ class PresensiPesertaController extends Controller
             ], 503);
         }
 
-        // ✅ PENENTU STATUS REGISTER ADA DI SINI
+
         $peserta->face_images = $request->face_images;
         $peserta->save();
 
@@ -352,7 +352,7 @@ class PresensiPesertaController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -360,7 +360,7 @@ class PresensiPesertaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -368,7 +368,7 @@ class PresensiPesertaController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -376,7 +376,7 @@ class PresensiPesertaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
@@ -384,7 +384,7 @@ class PresensiPesertaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
     }
 
     /**
@@ -392,6 +392,6 @@ class PresensiPesertaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }

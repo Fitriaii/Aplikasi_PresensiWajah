@@ -162,7 +162,7 @@
     </div>
 
     <script>
-        // DOM Elements
+
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -180,7 +180,7 @@
         let currentStream = null;
         let checkInterval = null;
 
-        // Status Configuration
+
         const statusConfig = {
             searching: {
                 text: 'Mencari wajah...',
@@ -226,7 +226,7 @@
             }
         };
 
-        // Initialize Camera
+
         async function initCamera() {
             try {
                 console.log('Requesting camera access...');
@@ -249,7 +249,7 @@
                     cameraLoadingOverlay.classList.add('hidden');
                     video.play().then(() => {
                         console.log('Video playing');
-                        // Mulai face check setelah 1 detik untuk memastikan video sudah stabil
+
                         setTimeout(() => {
                             startFaceCheck();
                         }, 1000);
@@ -275,7 +275,7 @@
             }
         }
 
-        // Capture Frame
+
         function captureFrame() {
             if (!video.videoWidth || !video.videoHeight) return null;
 
@@ -290,7 +290,7 @@
             return canvas.toDataURL('image/jpeg', 0.8);
         }
 
-        // Update Status UI
+
         function updateStatus(status, customMessage = null) {
             const config = statusConfig[status] || statusConfig.searching;
 
@@ -304,7 +304,7 @@
             statusIcon.className = `w-6 h-6 ${config.color} pulse-animation`;
         }
 
-        // Check Face via API
+
         async function checkFace() {
             if (!cameraReady || isProcessing || isCapturing) return;
 
@@ -326,7 +326,7 @@
 
                 updateStatus(data.status, data.message);
 
-                // Auto-capture when face is in good position
+
                 if (data.status === 'good' && data.can_register && !isCapturing) {
                     stopFaceCheck();
                     await startAutoCapture();
@@ -337,13 +337,13 @@
             }
         }
 
-        // Start Face Check Loop
+
         function startFaceCheck() {
             if (checkInterval) clearInterval(checkInterval);
             checkInterval = setInterval(checkFace, 1200);
         }
 
-        // Stop Face Check Loop
+
         function stopFaceCheck() {
             if (checkInterval) {
                 clearInterval(checkInterval);
@@ -351,7 +351,7 @@
             }
         }
 
-        // Auto Multi-Capture (5 images)
+
         async function startAutoCapture() {
             if (isCapturing) return;
 
@@ -376,7 +376,7 @@
             }, 350);
         }
 
-        // Register Face to Server
+
         async function registerFace(images) {
             const pesertaId = document.getElementById('face-app') ?.dataset ?.pesertaId;
 
@@ -431,12 +431,12 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Redirect ke halaman presensi dengan pesertaId yang sudah di-set
+
                             const redirectUrl = `/peserta/presensi/${pesertaId}`;
                             console.log('Redirecting to:', redirectUrl); // Debug
                             window.location.href = redirectUrl;
                         } else {
-                            // Redirect ke beranda
+
                             window.location.href = '/';
                         }
                     });
@@ -459,7 +459,7 @@
             }
         }
 
-        // Show Error Alert
+
         function showError(message) {
             Swal.fire({
                 icon: 'error',
@@ -469,7 +469,7 @@
             });
         }
 
-        // Cleanup
+
         function cleanup() {
             stopFaceCheck();
             if (currentStream) {
@@ -478,7 +478,7 @@
             }
         }
 
-        // Initialize on page load
+
         window.addEventListener('DOMContentLoaded', initCamera);
         window.addEventListener('beforeunload', cleanup);
     </script>

@@ -36,13 +36,13 @@
         </div>
 
         @php
-            // Cek apakah presensi sudah expired
+
             $isExpired = false;
             if ($presensi && $presensi->end_time) {
                 $isExpired = \Carbon\Carbon::parse($presensi->end_time)->isPast();
             }
 
-            // Cek apakah presensi belum dimulai
+
             $isUpcoming = false;
             if ($presensi && $presensi->start_time) {
                 $isUpcoming = \Carbon\Carbon::parse($presensi->start_time)->isFuture();
@@ -374,7 +374,7 @@
 @endif
 
 <script>
-    // Function untuk konfirmasi matikan presensi
+
     function confirmMatikanPresensi(form) {
         event.preventDefault();
 
@@ -404,7 +404,7 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Show loading
+
                 Swal.fire({
                     title: 'Memproses...',
                     html: 'Sedang mematikan presensi',
@@ -415,7 +415,7 @@
                     }
                 });
 
-                // Submit form
+
                 form.submit();
             }
         });
@@ -423,7 +423,7 @@
         return false;
     }
 
-    // Function untuk konfirmasi batalkan presensi
+
     function confirmBatalkanPresensi(form) {
         event.preventDefault();
 
@@ -453,7 +453,7 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Show loading
+
                 Swal.fire({
                     title: 'Memproses...',
                     html: 'Sedang membatalkan presensi',
@@ -464,7 +464,7 @@
                     }
                 });
 
-                // Submit form
+
                 form.submit();
             }
         });
@@ -472,7 +472,7 @@
         return false;
     }
 
-    // Auto hide expired warning
+
     @if($presensiAktif && $isExpired)
         setTimeout(() => {
             Swal.fire({
@@ -501,7 +501,7 @@
         }, 1000);
     @endif
 
-    // Welcome message untuk upcoming event
+
     @if($presensiAktif && $isUpcoming)
         setTimeout(() => {
             Swal.fire({

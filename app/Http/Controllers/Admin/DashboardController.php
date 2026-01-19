@@ -27,7 +27,7 @@ class DashboardController extends Controller
 
         $totalBelumHadir = $totalPeserta - $totalHadir;
 
-        // ✅ Persentase Kehadiran
+
         $persentaseHadir = $totalPeserta > 0
             ? round(($totalHadir / $totalPeserta) * 100, 1)
             : 0;
@@ -56,7 +56,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -64,7 +64,7 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -72,7 +72,7 @@ class DashboardController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -80,7 +80,7 @@ class DashboardController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
@@ -88,7 +88,7 @@ class DashboardController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
     }
 
     /**
@@ -96,6 +96,6 @@ class DashboardController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }

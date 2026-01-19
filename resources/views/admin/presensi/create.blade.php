@@ -184,7 +184,7 @@
 </div>
 
 <script>
-// Search functionality
+
 document.getElementById('search_peserta').addEventListener('input', function(e) {
     const searchTerm = e.target.value.toLowerCase();
     const participantRows = document.querySelectorAll('.participant-item');
@@ -203,7 +203,7 @@ document.getElementById('search_peserta').addEventListener('input', function(e) 
         }
     });
 
-    // Show/hide no results message and table
+
     if (visibleCount === 0 && searchTerm !== '') {
         noResults.classList.remove('hidden');
         table.classList.add('hidden');
@@ -213,7 +213,7 @@ document.getElementById('search_peserta').addEventListener('input', function(e) 
     }
 });
 
-// Confirmation before submit
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.form-absen').forEach(form => {
         form.addEventListener('submit', function (e) {

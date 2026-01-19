@@ -5,7 +5,7 @@
 
     <div class="mb-1 bg-white rounded-sm shadow-sm ">
         <div class="p-4">
-                        <!-- Header Section -->
+            <!-- Header Section -->
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-purple-800">Dashboard Admin</h1>
                 <p class="mt-1 text-grey-600">Selamat datang di dashboard admin PresenSee!</p>

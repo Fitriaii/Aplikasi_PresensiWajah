@@ -22,12 +22,12 @@ class ParticipantsController extends Controller
             });
         }
 
-        // 🎯 Filter: Jenis Kelamin
+
         if ($request->filled('gender')) {
             $query->where('gender', $request->gender);
         }
 
-        // ↕️ Sorting
+
         switch ($request->sort) {
             case 'name_asc':
                 $query->orderBy('name', 'asc');
@@ -94,7 +94,7 @@ class ParticipantsController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

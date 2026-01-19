@@ -162,7 +162,7 @@
     </div>
 
     <script>
-        // DOM Elements
+
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -180,7 +180,7 @@
         let currentStream = null;
         let checkInterval = null;
 
-        // Status Configuration
+
         const statusConfig = {
             searching: {
                 text: 'Mencari wajah...',
@@ -226,7 +226,7 @@
             }
         };
 
-        // Initialize Camera
+
         async function initCamera() {
             try {
                 console.log('Requesting camera access...');
@@ -274,7 +274,7 @@
             }
         }
 
-        // Capture Frame
+
         function captureFrame() {
             if (!video.videoWidth || !video.videoHeight) return null;
 
@@ -289,7 +289,7 @@
             return canvas.toDataURL('image/jpeg', 0.85);
         }
 
-        // Update Status UI
+
         function updateStatus(status, customMessage = null) {
             const config = statusConfig[status] || statusConfig.searching;
 
@@ -303,7 +303,7 @@
             statusIcon.className = `w-6 h-6 ${config.color} pulse-animation`;
         }
 
-        // Check Face via API
+
         async function checkFace() {
             if (!cameraReady || isProcessing || isCapturing) return;
 
@@ -337,10 +337,10 @@
             }
         }
 
-        // Recognize and Attend
+
         async function recognizeAndAttend(image) {
             try {
-                // Tampilkan loading overlay saat processing
+
                 isProcessing = true;
                 loadingOverlay.classList.remove('hidden');
 
@@ -356,21 +356,21 @@
                     body: JSON.stringify({ image })
                 });
 
-                // Parse response
+
                 const data = await response.json();
 
-                // Debug logging
+
                 console.log('=== FACE ATTENDANCE DEBUG ===');
                 console.log('Response Status:', response.status);
                 console.log('Response OK:', response.ok);
                 console.log('Response Data:', data);
                 console.log('============================');
 
-                // Sembunyikan loading overlay setelah dapat response
+
                 loadingOverlay.classList.add('hidden');
                 isProcessing = false;
 
-                // ✅ Prioritas 1: Cek jika ada success flag (berbagai format)
+
                 const isSuccess = data.success === true ||
                                  data.status === 'success' ||
                                  data.message?.toLowerCase().includes('berhasil') ||
@@ -394,7 +394,7 @@
                     return true;
                 }
 
-                // ⚠️ Prioritas 2: Info status
+
                 if (data.status === 'info' || data.status === 'warning') {
                     const infoMessage = data.message || 'Informasi dari sistem';
                     updateStatus('info', infoMessage);
@@ -411,7 +411,7 @@
                     return false;
                 }
 
-                // ❌ Prioritas 3: Error status
+
                 const errorMessage = data.message ||
                                    data.error ||
                                    data.errors?.[0] ||
@@ -436,7 +436,7 @@
                 console.error('Error Message:', err.message);
                 console.error('==================');
 
-                // Sembunyikan loading overlay jika terjadi error
+
                 loadingOverlay.classList.add('hidden');
                 isProcessing = false;
 
@@ -455,13 +455,13 @@
             }
         }
 
-        // Start Face Check Loop
+
         function startFaceCheck() {
             if (checkInterval) clearInterval(checkInterval);
             checkInterval = setInterval(checkFace, 1200);
         }
 
-        // Stop Face Check Loop
+
         function stopFaceCheck() {
             if (checkInterval) {
                 clearInterval(checkInterval);
@@ -469,7 +469,7 @@
             }
         }
 
-        // Show Error Alert
+
         function showError(message) {
             Swal.fire({
                 icon: 'error',
@@ -479,7 +479,7 @@
             });
         }
 
-        // Cleanup
+
         function cleanup() {
             stopFaceCheck();
             if (currentStream) {
@@ -488,7 +488,7 @@
             }
         }
 
-        // Initialize on page load
+
         window.addEventListener('DOMContentLoaded', initCamera);
         window.addEventListener('beforeunload', cleanup);
     </script>

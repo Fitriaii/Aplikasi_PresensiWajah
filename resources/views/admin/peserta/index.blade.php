@@ -203,7 +203,7 @@
         });
     }
 
-    // Auto-submit filter form saat filter berubah
+
     const filterForm = document.getElementById('filterForm');
     ['gender', 'sort'].forEach(id => {
         const el = document.getElementById(id);
@@ -214,7 +214,7 @@
         }
     });
 
-    // Konfirmasi hapus siswa
+
     function confirmDelete(id) {
         Swal.fire({
             title: 'Apakah Anda yakin?',
@@ -231,7 +231,7 @@
             }
         });
     }
-    // Tampilkan alert sukses/error dari session
+
 </script>
 @if (session('status') === 'success' && session('message'))
     <script>

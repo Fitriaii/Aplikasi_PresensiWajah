@@ -31,14 +31,14 @@ class AttendancesController extends Controller
             });
         }
 
-        // 🎯 Filter: Jenis Kelamin
+
         if ($request->filled('gender')) {
             $query->whereHas('participant', function ($q) use ($request) {
                 $q->where('gender', $request->gender);
             });
         }
 
-        // ↕️ Sorting
+
         switch ($request->sort) {
             case 'name_asc':
                 $query->orderBy(
@@ -79,15 +79,15 @@ class AttendancesController extends Controller
      */
     public function create(Request $request)
     {
-        // Gunakan Carbon untuk datetime yang akurat dengan timezone
+
         $now = \Carbon\Carbon::now();
 
-        // 1️⃣ Ambil presensi yang MASIH VALID SECARA WAKTU (DateTime)
+
         $activeSetting = AttendanceSetting::where('is_active', true)
             ->whereRaw('? BETWEEN start_time AND end_time', [$now])
             ->first();
 
-        // 2️⃣ AUTO CLOSE presensi yang SUDAH LEWAT END TIME (DateTime)
+
         $closedCount = AttendanceSetting::where('is_active', true)
             ->where('end_time', '<', $now)
             ->update([
@@ -95,15 +95,15 @@ class AttendancesController extends Controller
                 'updated_at' => $now
             ]);
 
-        // Optional: Log jika ada presensi yang di-close otomatis
+
         if ($closedCount > 0) {
             Log::info("Auto-closed {$closedCount} expired attendance settings at {$now}");
         }
 
-        // 3️⃣ Query peserta
+
         $query = Participants::query();
 
-        // 4️⃣ Load attendance HANYA jika presensi aktif
+
         if ($activeSetting) {
             $query->with([
                 'attendances' => function ($q) use ($activeSetting) {
@@ -113,7 +113,7 @@ class AttendancesController extends Controller
             ]);
         }
 
-        // 5️⃣ Search berdasarkan nama peserta
+
         if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
@@ -123,12 +123,12 @@ class AttendancesController extends Controller
             });
         }
 
-        // 6️⃣ Filter berdasarkan gender jika ada
+
         if ($request->filled('gender')) {
             $query->where('gender', $request->gender);
         }
 
-        // 7️⃣ Sorting
+
         $sortColumn = 'created_at';
         $sortDirection = 'desc';
 
@@ -159,7 +159,7 @@ class AttendancesController extends Controller
             ->paginate(10)
             ->withQueryString(); // Maintain query parameters in pagination
 
-        // 8️⃣ Hitung statistik untuk ditampilkan di view (optional)
+
         $stats = null;
         if ($activeSetting) {
             $stats = [
@@ -214,8 +214,8 @@ class AttendancesController extends Controller
 
             Log::info("Attendance setting #{$setting->id} auto-closed at {$now}");
 
-            // Optional: Kirim notifikasi atau trigger event
-            // event(new AttendanceSettingClosed($setting));
+
+
         }
 
         return response()->json([
@@ -232,23 +232,23 @@ class AttendancesController extends Controller
      */
     public function store(Request $request)
     {
-        // Auto-deactivate expired attendance settings
+
         $this->autoDeactivateExpired();
 
-        // Validasi input
+
         $validated = $request->validate([
             'participant_id' => 'required|exists:participants,id',
         ]);
 
         $now = \Carbon\Carbon::now(); //Gunakan Carbon untuk datetime penuh
 
-        // Cari attendance setting yang aktif dan masih dalam rentang waktu
+
         $activeSetting = AttendanceSetting::where('is_active', true)
             ->where('start_time', '<=', $now)
             ->where('end_time', '>=', $now)
             ->first();
 
-        // Jika tidak ada attendance setting yang aktif
+
         if (!$activeSetting) {
             return back()->with([
                 'status'  => 'error',
@@ -256,7 +256,7 @@ class AttendancesController extends Controller
             ]);
         }
 
-        // Cek apakah peserta sudah melakukan presensi
+
         $exists = Attendances::where('attendances_setting_id', $activeSetting->id)
             ->where('participant_id', $request->participant_id)
             ->exists();
@@ -269,7 +269,7 @@ class AttendancesController extends Controller
         }
 
         try {
-            // Simpan presensi
+
             Attendances::create([
                 'attendances_setting_id' => $activeSetting->id,
                 'participant_id'        => $request->participant_id,
@@ -277,7 +277,7 @@ class AttendancesController extends Controller
                 'attended_at'           => $now,
             ]);
 
-            // Ambil data peserta untuk pesan sukses
+
             $participant = Participants::find($request->participant_id);
 
             return back()->with([
@@ -306,7 +306,7 @@ class AttendancesController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -314,7 +314,7 @@ class AttendancesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
@@ -322,7 +322,7 @@ class AttendancesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
     }
 
     /**
@@ -330,36 +330,36 @@ class AttendancesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 
     public function settingPage()
 {
-    // Auto-deactivate expired settings
+
     $this->autoDeactivateExpired();
 
     $now = \Carbon\Carbon::now();
 
-    // Get active attendance setting yang masih dalam rentang waktu
+
     $presensi = AttendanceSetting::where('is_active', true)
         ->where('start_time', '<=', $now)
         ->where('end_time', '>=', $now)
         ->first();
 
-    // Jika tidak ada yang aktif, cek apakah ada yang upcoming
+
     if (!$presensi) {
         $presensi = AttendanceSetting::where('is_active', true)
             ->orderBy('start_time', 'desc')
             ->first();
     }
 
-    // Get attendance log/history
+
     $presensiLog = AttendanceSetting::latest()->take(10)->get();
 
-    // Get all participants
+
     $peserta = Participants::all();
 
-    // Determine if attendance is active
+
     $presensiAktif = false;
 
     if ($presensi) {
@@ -379,10 +379,10 @@ class AttendancesController extends Controller
  */
     public function setting(Request $request)
     {
-        // Auto-deactivate expired settings first
+
         $this->autoDeactivateExpired();
 
-        // Validate input - now using datetime-local format
+
         $validated = $request->validate([
             'start_time' => 'required|date|after_or_equal:now',
             'end_time'   => 'required|date|after:start_time',
@@ -397,7 +397,7 @@ class AttendancesController extends Controller
             $startTime = \Carbon\Carbon::parse($validated['start_time']);
             $endTime = \Carbon\Carbon::parse($validated['end_time']);
 
-            // Validasi durasi minimal 5 menit
+
             $durationInMinutes = $startTime->diffInMinutes($endTime);
             if ($durationInMinutes < 5) {
                 return back()->withInput()->with([
@@ -406,7 +406,7 @@ class AttendancesController extends Controller
                 ]);
             }
 
-            // Validasi durasi maksimal (opsional, misal 24 jam)
+
             if ($durationInMinutes > 1440) { // 24 jam
                 return back()->withInput()->with([
                     'status' => 'error',
@@ -414,7 +414,7 @@ class AttendancesController extends Controller
                 ]);
             }
 
-            // Cek overlapping dengan attendance setting aktif lainnya
+
             $overlapping = AttendanceSetting::where('is_active', true)
                 ->where(function($query) use ($startTime, $endTime) {
                     $query->whereBetween('start_time', [$startTime, $endTime])
@@ -435,19 +435,19 @@ class AttendancesController extends Controller
 
             DB::beginTransaction();
 
-            // Deactivate old attendance settings
+
             AttendanceSetting::where('is_active', true)
                 ->update(['is_active' => false]);
 
 
-            // Create new attendance setting
+
             $newSetting = AttendanceSetting::create([
                 'start_time' => $startTime,
                 'end_time'   => $endTime,
                 'is_active'  => true,
             ]);
 
-            // Log the action
+
             Log::info('Attendance setting activated', [
                 'id' => $newSetting->id,
                 'start_time' => $startTime->toDateTimeString(),
@@ -510,10 +510,10 @@ class AttendancesController extends Controller
                 ]);
             }
 
-            // Deactivate attendance setting
+
             $activeSetting->update(['is_active' => false]);
 
-            // Log the action
+
             Log::info('Attendance setting deactivated', [
                 'id' => $activeSetting->id,
             ]);
