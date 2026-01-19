@@ -68,7 +68,7 @@ pip install -r requirements.txt
 
 1. Clone repository:
 ```bash
-https://github.com/Fitriaii/Aplikasi_PresensiWajah
+https://github.com/Fitriaii/Aplikasi_PresensiWajah.git
 cd presensee
 ```
 2. Konfigurasi Laravel:
