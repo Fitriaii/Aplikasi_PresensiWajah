@@ -1,22 +1,57 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>Presensi Peserta Acara</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
 
     <body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        @include('sweetalert::alert')
+        <!-- Navbar -->
+        <nav class="fixed top-0 left-0 right-0 z-50 border-b bg-white/90 backdrop-blur-md border-slate-200">
+            <div class="container px-4 py-3 mx-auto sm:py-4 max-w-7xl">
+                <div class="flex items-center justify-between">
+                    <!-- Logo/Brand -->
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <div class="flex items-center justify-center w-8 h-8 rounded-lg sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-indigo-600">
+                            <svg class="w-4 h-4 text-white sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold sm:text-base text-slate-900">Presensi AI</p>
+                            <p class="hidden text-xs sm:block text-slate-500">Face Recognition</p>
+                        </div>
+                    </div>
 
-        <div class="relative min-h-screen">
+                    <!-- Navigation Links -->
+                    <div class="flex items-center gap-1 sm:gap-2">
+                        <a href="#home-section"
+                           class="px-3 py-2 text-xs font-semibold transition-all rounded-lg sm:px-4 sm:py-2 sm:text-sm text-slate-700 hover:text-blue-600 hover:bg-blue-50">
+                            Beranda
+                        </a>
+                        <a href="#presensi-section"
+                           class="px-3 py-2 text-xs font-semibold transition-all rounded-lg sm:px-4 sm:py-2 sm:text-sm text-slate-700 hover:text-blue-600 hover:bg-blue-50">
+                            Presensi
+                        </a>
+                        <a href="#about-section"
+                           class="px-3 py-2 text-xs font-semibold transition-all rounded-lg sm:px-4 sm:py-2 sm:text-sm text-slate-700 hover:text-blue-600 hover:bg-blue-50">
+                            Tentang
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="relative min-h-screen pt-14 sm:pt-16">
 
             <!-- Header Section -->
-            <div class="border-b shadow-sm bg-white/80 backdrop-blur-sm border-slate-200/50">
+            <div id="home-section"></div>
+            <div class="border-b bg-white/80 backdrop-blur-sm border-slate-200/50">
                 <div class="container px-4 py-8 mx-auto sm:py-10 md:py-12 max-w-7xl">
                     <div class="text-center">
                         <!-- Badge -->
@@ -39,20 +74,20 @@
 
                         <!-- Technology Badge -->
                         <div class="flex flex-wrap items-center justify-center gap-2 px-2 mt-4 sm:gap-3 sm:mt-6">
-                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border-2 shadow-sm text-slate-700 border-slate-200 rounded-xl">
+                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl">
                                 <svg class="w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                                 </svg>
                                 AI-Powered
                             </span>
-                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border-2 shadow-sm text-slate-700 border-slate-200 rounded-xl">
+                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl">
                                 <svg class="w-4 h-4 text-green-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                 </svg>
                                 <span class="hidden sm:inline">Aman & Terenkripsi</span>
                                 <span class="sm:hidden">Aman</span>
                             </span>
-                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border-2 shadow-sm text-slate-700 border-slate-200 rounded-xl">
+                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl">
                                 <svg class="w-4 h-4 text-purple-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
@@ -64,7 +99,7 @@
                         <div class="mt-6 sm:mt-8 md:mt-10">
                             <button
                                 onclick="document.getElementById('presensi-section')?.scrollIntoView({ behavior: 'smooth' })"
-                                class="inline-flex items-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 md:px-10 sm:py-3.5 md:py-4 text-sm sm:text-base font-semibold text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5"
+                                class="inline-flex items-center gap-2 sm:gap-3 px-6 py-3 sm:px-8 md:px-10 sm:py-3.5 md:py-4 text-sm sm:text-base font-semibold text-white transition-all bg-blue-600 rounded-lg hover:bg-blue-700 hover:-translate-y-0.5"
                             >
                                 Mulai Presensi
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +165,7 @@
                         <div class="grid grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:grid-cols-4">
                             <!-- Step 1 -->
                             <div class="relative flex flex-col items-center group">
-                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 rounded-full shadow-xl sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-500 to-indigo-600 group-hover:scale-110 group-hover:shadow-2xl">
+                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 rounded-full sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-500 to-indigo-600 group-hover:scale-110">
                                     <div class="relative text-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 mx-auto mb-1 text-white sm:w-10 sm:h-10 md:w-12 md:h-12">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -146,7 +181,7 @@
 
                             <!-- Step 2 -->
                             <div class="relative flex flex-col items-center group">
-                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full shadow-lg sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-blue-400 group-hover:shadow-xl">
+                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-blue-400">
                                     <div class="text-center">
                                         <svg class="w-8 h-8 mx-auto mb-1 transition-colors sm:w-10 sm:h-10 md:w-12 md:h-12 text-slate-600 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -162,7 +197,7 @@
 
                             <!-- Step 3 -->
                             <div class="relative flex flex-col items-center group">
-                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full shadow-lg sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-indigo-400 group-hover:shadow-xl">
+                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-indigo-400">
                                     <div class="text-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mx-auto mb-1 transition-colors sm:w-10 sm:h-10 md:w-12 md:h-12 text-slate-600 group-hover:text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
@@ -184,7 +219,7 @@
 
                             <!-- Step 4 -->
                             <div class="relative flex flex-col items-center group">
-                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full shadow-lg sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-green-400 group-hover:shadow-xl">
+                                <div class="relative z-10 flex items-center justify-center w-20 h-20 transition-all duration-300 bg-white border-4 rounded-full sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-slate-300 group-hover:scale-110 group-hover:border-green-400">
                                     <div class="text-center">
                                         <svg class="w-8 h-8 mx-auto mb-1 transition-colors sm:w-10 sm:h-10 md:w-12 md:h-12 text-slate-600 group-hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
@@ -217,13 +252,12 @@
                     </div>
 
                     <!-- Card -->
-                    <div class="relative p-4 overflow-hidden bg-white shadow-2xl sm:p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl">
+                    <div class="relative p-4 overflow-hidden bg-white border sm:p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border-slate-200">
                         <!-- Decorative gradient -->
                         <div class="absolute top-0 left-0 right-0 h-1.5 sm:h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
 
                         <!-- Search -->
                         <div class="relative mb-6 sm:mb-8">
-                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-xl blur-xl"></div>
                             <div class="relative">
                                 <svg class="absolute w-5 h-5 -translate-y-1/2 sm:w-6 sm:h-6 text-slate-400 left-3 sm:left-4 md:left-5 top-1/2"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -235,7 +269,7 @@
                                     type="text"
                                     id="searchInput"
                                     placeholder="Ketik nama Anda untuk mencari..."
-                                    class="w-full py-3 pl-10 pr-10 text-sm font-medium transition-all bg-white border-2 shadow-sm sm:py-4 md:py-5 sm:text-base sm:pl-12 md:pl-14 sm:pr-12 md:pr-14 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400"
+                                    class="w-full py-3 pl-10 pr-10 text-sm font-medium transition-all bg-white border border-slate-300 sm:py-4 md:py-5 sm:text-base sm:pl-12 md:pl-14 sm:pr-12 md:pr-14 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-slate-400"
                                     onkeyup="filterParticipants()"
                                 />
 
@@ -252,7 +286,7 @@
                         </div>
 
                         <!-- List Peserta -->
-                        <div id="participantList" class="space-y-2 sm:space-y-3 overflow-y-auto max-h-[360px] sm:max-h-[420px] md:max-h-[480px] pr-1 sm:pr-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-slate-100">
+                        <div id="participantList" class="space-y-2 sm:space-y-3 overflow-y-auto max-h-[360px] sm:max-h-[420px] md:max-h-[480px] pr-1 sm:pr-2">
                             @foreach ($participants as $participant)
                                 <div class="participant-item" data-name="{{ strtolower($participant->name) }}">
                                     <button
@@ -265,12 +299,10 @@
                                         )"
                                         class="w-full text-left group"
                                     >
-                                        <div class="relative flex items-center gap-3 p-3 overflow-hidden transition-all duration-300 border-2 sm:gap-4 md:gap-5 sm:p-4 md:p-5 border-slate-200 rounded-xl md:rounded-2xl hover:border-blue-400 hover:shadow-lg bg-gradient-to-r from-transparent to-transparent hover:from-blue-50/50 hover:to-indigo-50/50">
+                                        <div class="relative flex items-center gap-3 p-3 overflow-hidden transition-all duration-300 border sm:gap-4 md:gap-5 sm:p-4 md:p-5 border-slate-200 rounded-xl md:rounded-2xl hover:border-blue-400 bg-gradient-to-r from-transparent to-transparent hover:from-blue-50/50 hover:to-indigo-50/50">
                                             <div class="flex items-center justify-center flex-shrink-0 w-12 h-12 transition-all duration-300 rounded-lg sm:w-14 sm:h-14 md:w-16 md:h-16 md:rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-blue-100 group-hover:to-indigo-100 group-hover:scale-110">
-                                                <svg class="w-6 h-6 transition-colors sm:w-7 sm:h-7 md:w-8 md:h-8 text-slate-600 group-hover:text-blue-600" fill="none"
-                                                    stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                                <svg class="w-6 h-6 transition-colors sm:w-7 sm:h-7 md:w-8 md:h-8 text-slate-600 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                                 </svg>
                                             </div>
 
@@ -298,10 +330,8 @@
                                                 @endif
                                             </div>
 
-                                            <svg class="flex-shrink-0 w-5 h-5 transition-all sm:w-6 sm:h-6 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1" fill="none"
-                                                stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9 5l7 7-7 7"/>
+                                            <svg class="flex-shrink-0 w-5 h-5 transition-all sm:w-6 sm:h-6 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                                             </svg>
                                         </div>
                                     </button>
@@ -325,7 +355,7 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex flex-col items-center justify-between gap-3 pt-4 mt-6 border-t-2 sm:flex-row sm:gap-0 sm:pt-6 sm:mt-8 border-slate-100">
+                        <div class="flex flex-col items-center justify-between gap-3 pt-4 mt-6 border-t sm:flex-row sm:gap-0 sm:pt-6 sm:mt-8 border-slate-100">
                             <p class="text-xs font-medium text-center sm:text-sm text-slate-600 sm:text-left">
                                 Menampilkan
                                 <span id="resultCount" class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
@@ -334,7 +364,7 @@
                                 dari {{ count($participants) }} peserta
                             </p>
 
-                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-wide text-white uppercase bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg shadow-md">
+                            <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold tracking-wide text-white uppercase bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
                                 <span class="relative flex w-1.5 h-1.5 sm:w-2 sm:h-2">
                                     <span class="absolute inline-flex w-full h-full bg-white rounded-full opacity-75 animate-ping"></span>
                                     <span class="relative inline-flex w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></span>
@@ -346,7 +376,7 @@
 
                     <!-- Info -->
                     <div class="grid gap-3 mt-6 sm:gap-4 sm:mt-8 md:grid-cols-2">
-                        <div class="flex items-center gap-2 px-4 py-3 bg-white shadow-lg sm:gap-3 sm:px-5 md:px-6 sm:py-4 rounded-xl sm:rounded-2xl">
+                        <div class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 sm:gap-3 sm:px-5 md:px-6 sm:py-4 rounded-xl sm:rounded-2xl">
                             <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gradient-to-br from-blue-100 to-indigo-100">
                                 <svg class="w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -355,7 +385,7 @@
                             <span class="text-xs font-semibold sm:text-sm text-slate-700">Data wajah tersimpan aman dengan enkripsi</span>
                         </div>
 
-                        <div class="flex items-center gap-2 px-4 py-3 bg-white shadow-lg sm:gap-3 sm:px-5 md:px-6 sm:py-4 rounded-xl sm:rounded-2xl">
+                        <div class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 sm:gap-3 sm:px-5 md:px-6 sm:py-4 rounded-xl sm:rounded-2xl">
                             <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gradient-to-br from-purple-100 to-pink-100">
                                 <svg class="w-4 h-4 text-purple-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
@@ -367,9 +397,119 @@
                 </div>
             </div>
 
+            <!-- About Section -->
+            <div id="about-section" class="py-12 sm:py-16 md:py-20 bg-white/70 backdrop-blur-sm">
+                <div class="container max-w-4xl px-4 mx-auto">
+                    <div class="mb-8 text-center sm:mb-10">
+                        <h2 class="mb-2 text-2xl font-bold sm:mb-3 sm:text-3xl md:text-4xl text-slate-900">
+                            Tentang Aplikasi
+                        </h2>
+                        <p class="text-sm sm:text-base text-slate-600">Sistem Presensi Berbasis Face Recognition</p>
+                    </div>
+
+                    <div class="p-6 bg-white border sm:p-8 md:p-10 border-slate-200 rounded-2xl">
+                        <!-- App Info -->
+                        <div class="pb-6 mb-6 border-b border-slate-200">
+                            <div class="flex items-start gap-3 mb-4">
+                                <div class="flex items-center justify-center flex-shrink-0 w-12 h-12 rounded-lg sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600">
+                                    <svg class="w-6 h-6 text-white sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="mb-1 text-lg font-bold sm:text-xl text-slate-900">Sistem Presensi AI</h3>
+                                    <p class="text-sm font-medium sm:text-base text-slate-600">Versi 1.0.0</p>
+                                </div>
+                            </div>
+                            <p class="text-sm leading-relaxed sm:text-base text-slate-700">
+                                Aplikasi presensi modern menggunakan teknologi Face Recognition berbasis InsightFace untuk verifikasi identitas peserta acara secara akurat, cepat, dan aman.
+                            </p>
+                        </div>
+
+                        <!-- Developers -->
+                        <div class="mb-6">
+                            <h4 class="mb-3 text-base font-bold sm:text-lg text-slate-900">Tim Pengembang</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-sm sm:text-base text-slate-700">
+                                    <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                    <span>Slamet Riyadi</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm sm:text-base text-slate-700">
+                                    <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                    <span>Cahya Damarjati</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm sm:text-base text-slate-700">
+                                    <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                    <span>[Nama Anda]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Institution -->
+                        <div class="p-4 border-l-4 border-blue-600 sm:p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-r-xl">
+                            <p class="text-sm leading-relaxed sm:text-base text-slate-700">
+                                <span class="font-bold text-blue-900">Program Studi Teknologi Informasi</span> bekerja sama dengan
+                                <span class="font-bold text-indigo-900">Artificial Intelligence and Robotics Research Group</span>
+                                <br/>
+                                <span class="font-bold text-slate-900">Universitas Muhammadiyah Yogyakarta</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="py-6 bg-slate-900 sm:py-8">
+                <div class="container max-w-6xl px-4 mx-auto">
+                    <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+                        <!-- Logo/Brand -->
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-lg sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600">
+                                <svg class="w-5 h-5 text-white sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-white sm:text-base">Sistem Presensi AI</p>
+                                <p class="text-xs text-slate-400">Face Recognition System</p>
+                            </div>
+                        </div>
+
+                        <!-- Navigation -->
+                        <div class="flex items-center gap-4 text-sm sm:gap-6 sm:text-base">
+                            <a href="#presensi-section" class="transition-colors text-slate-300 hover:text-white">
+                                Presensi
+                            </a>
+                            <a href="#about-section" class="transition-colors text-slate-300 hover:text-white">
+                                Tentang
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="my-6 border-t border-slate-700"></div>
+
+                    <!-- Copyright -->
+                    <div class="text-center">
+                        <p class="mb-2 text-sm text-slate-400 sm:text-base">
+                            © 2024 <span class="font-semibold text-white">Universitas Muhammadiyah Yogyakarta</span>
+                        </p>
+                        <p class="text-xs text-slate-500 sm:text-sm">
+                            Program Studi Teknologi Informasi - AI & Robotics Research Group
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
             <!-- Modal: Training Wajah -->
             <div id="confirmTrainingModal" class="fixed inset-0 z-50 items-center justify-center hidden p-4 bg-black/60 backdrop-blur-sm">
-                <div class="w-full max-w-lg p-6 sm:p-8 bg-white shadow-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
+                <div class="w-full max-w-lg p-6 sm:p-8 bg-white rounded-2xl max-h-[90vh] overflow-y-auto">
                     <div class="mb-6 text-center sm:mb-8">
                         <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full sm:w-20 sm:h-20 sm:mb-5 bg-amber-100">
                             <svg class="w-8 h-8 sm:w-10 sm:h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -382,7 +522,7 @@
                         <p class="px-2 mb-3 text-sm leading-relaxed sm:mb-4 sm:text-base text-slate-600">
                             Anda perlu melakukan pendaftaran wajah terlebih dahulu sebelum dapat melakukan presensi menggunakan Face Recognition.
                         </p>
-                        <div class="p-3 border-2 border-blue-200 sm:p-4 bg-blue-50 rounded-xl">
+                        <div class="p-3 border border-blue-200 sm:p-4 bg-blue-50 rounded-xl">
                             <p class="text-xs font-semibold text-blue-800 sm:text-sm">
                                 <svg class="inline-block w-4 h-4 mr-1 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -405,7 +545,7 @@
                         </button>
 
                         <button onclick="closeTrainingModal()"
-                            class="w-full px-5 py-3 text-sm font-semibold transition-all border-2 sm:px-6 sm:py-4 sm:text-base text-slate-700 bg-slate-50 border-slate-200 rounded-xl hover:bg-slate-100">
+                            class="w-full px-5 py-3 text-sm font-semibold transition-all border sm:px-6 sm:py-4 sm:text-base text-slate-700 bg-slate-50 border-slate-300 rounded-xl hover:bg-slate-100">
                             Batal
                         </button>
                     </div>
@@ -448,11 +588,9 @@
                 selectedParticipantName = name;
                 selectedParticipantHasFace = hasFace;
 
-                // Langsung cek apakah sudah ada data wajah
                 if (!hasFace) {
                     openTrainingModal();
                 } else {
-                    // Langsung ke halaman face recognition
                     window.location.href = `/peserta/presensi/${id}`;
                 }
             }
@@ -503,19 +641,21 @@
                 filterParticipants();
             }
 
-            // Close modal on outside click
             document.getElementById('confirmTrainingModal')?.addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeTrainingModal();
                 }
             });
 
-            // Prevent body scroll when modal is open
-            window.addEventListener('resize', function() {
-                const modal = document.getElementById('confirmTrainingModal');
-                if (!modal.classList.contains('hidden')) {
-                    document.body.style.overflow = 'hidden';
-                }
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
             });
         </script>
     </body>
