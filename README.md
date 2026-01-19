@@ -1,59 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📸 PresenSee
+PresenSee adalah aplikasi presensi berbasis Face Recognition yang mengintegrasikan Laravel (Web/API) dengan Face API (Python) menggunakan teknologi InsightFace untuk proses deteksi dan pengenalan wajah, sehingga mampu mencatat kehadiran peserta secara otomatis, akurat, dan real-time.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🧩 Nama Aplikasi
+PresenSee
 
-## About Laravel
+## 🚀 Cara Menggunakan Aplikasi
+Alur penggunaan aplikasi PresenSee adalah sebagai berikut:
+1. Admin login ke sistem melalui halaman admin.
+   Untuk Login Admin (**email** : admin@gmail.com ; **password** : password)
+3. Admin menambahkan data peserta.
+4. Admin mengatur waktu presensi untuk mengaktifkan presensi.
+5. Setelah presensi aktif, peserta masuk ke halaman landing page peserta.
+6. Peserta mencari dan memilih nama mereka masing-masing.
+7. Sistem akan mengecek apakah data wajah peserta sudah terdaftar.
+8. Jika data wajah belum ada, sistem akan menampilkan popup modal alert untuk melakukan registrasi wajah terlebih dahulu.
+9. Setelah registrasi wajah berhasil, peserta dapat melakukan presensi.
+10. Sistem akan memverifikasi wajah melalui Face API.
+11. Jika valid, presensi berhasil dan data kehadiran tercatat di sistem.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Catatan:
+- Aplikasi ini harus berjalan dengan dua server aktif:
+  - Server Laravel (Web/API)
+  - Server Face API (Python)
+- Koneksi antar server harus aktif agar proses registrasi dan presensi berjalan normal.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🧰 Persyaratan / Requirements
+### Laravel Web
+Persyaratan:
+- PHP >8.x
+- Composer
+- Node.js & NPM
+- Database (MySQL / PostgreSQL)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Instalasi dependency Laravel:
+- composer install
+- npm install
+- php artisan migrate
+- php artisan db:seed
 
-## Learning Laravel
+### Face API (Python)/InsightFace
+Persyaratan:
+- Python >3.9
+- pip
+---
+#### Masuk ke direktori Face API
+```bash
+cd face-api
+```
+---
+Setup virtual environment:
+```bash
+python -m venv venv
+```
+---
+Aktivasi virtual environment (Windows):
+```bash
+venv\Scripts\activate
+```
+---
+Upgrade pip dan install dependency:
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ⚙️ Langkah Instalasi Awal (Initial Setup)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Clone repository:
+```bash
+https://github.com/Fitriaii/Aplikasi_PresensiWajah
+cd presensee
+```
+2. Konfigurasi Laravel:
+- Copy file `.env.example` menjadi `.env`
+- Atur database dan URL Face API
+```bash
+php artisan key:generate
+```
+3. Setup Face API:
+- Masuk ke folder Face API
+- Aktifkan virtual environment
+- Install semua dependency Python
+4. Pastikan Laravel dan Face API dapat saling terhubung.
+   
+## 💻 Langkah Pengembangan Lokal (Local Development Steps)
+Menjalankan Laravel:
+```bash
+php artisan serve
+npm run dev
+```
+Laravel akan berjalan di:
+```bash
+http://localhost:8000
+```
+Menjalankan Face API:
+```bash
+cd face-api
+uvicorn app:app --host 0.0.0.0 --port 5000
+```
 
-## Laravel Sponsors
+## 🚀 Langkah Deploy untuk Versi Produksi (Production Deployment Steps)
+### Laravel (Production)
+1. Install dependency:
+```bash
+composer install --optimize-autoloader --no-dev
+npm run build
+```
+2. Atur environment production:
+```bash
+APP_ENV=production
+APP_DEBUG=false
+```
+3. Jalankan migrasi database:
+```bash
+php artisan migrate --force
+```
+4. Optimasi aplikasi:
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Face API (Production)
+1. Aktifkan virtual environment
+2. Menjalankan Face API menggunakan Uvicorn (disarankan):
+```bash
+uvicorn app:app --host 0.0.0.0 --port 5000
+```
 
-### Premium Partners
+## 📄 Lisensi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Aplikasi ini digunakan untuk kebutuhan internal, pembelajaran, dan pengembangan sistem presensi.
