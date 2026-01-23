@@ -413,12 +413,13 @@
                         <div class="pb-6 mb-6 border-b border-slate-200">
                             <div class="flex items-start gap-3 mb-4">
                                 <div class="flex items-center justify-center flex-shrink-0 w-12 h-12 rounded-lg sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600">
-                                    <svg class="w-6 h-6 text-white sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    <svg class="w-4 h-4 text-white sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 7V5a2 2 0 012-2h3m11 0h3a2 2 0 012 2v2M3 17v2a2 2 0 002 2h3m11 0h3a2 2 0 002-2v-2"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="mb-1 text-lg font-bold sm:text-xl text-slate-900">Sistem Presensi AI</h3>
+                                    <h3 class="mb-1 text-lg font-bold sm:text-xl text-slate-900">PresenSee</h3>
                                     <p class="text-sm font-medium sm:text-base text-slate-600">Versi 1.0.0</p>
                                 </div>
                             </div>
@@ -435,19 +436,19 @@
                                     <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    <span>Slamet Riyadi</span>
+                                    <span>Prof. Ir. Slamet Riyadi, S.T., M.Sc., Ph.D.</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-sm sm:text-base text-slate-700">
                                     <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    <span>Cahya Damarjati</span>
+                                    <span>Cahya Damarjati, S.T., M.Eng., Ph.D.</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-sm sm:text-base text-slate-700">
                                     <svg class="flex-shrink-0 w-4 h-4 text-blue-600 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
-                                    <span>[Nama Anda]</span>
+                                    <span>Aisah Atik Fitriani, S.Kom.</span>
                                 </div>
                             </div>
                         </div>
@@ -468,38 +469,10 @@
             <!-- Footer -->
             <footer class="py-6 bg-slate-900 sm:py-8">
                 <div class="container max-w-6xl px-4 mx-auto">
-                    <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
-                        <!-- Logo/Brand -->
-                        <div class="flex items-center gap-2 sm:gap-3">
-                            <div class="flex items-center justify-center w-10 h-10 rounded-lg sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600">
-                                <svg class="w-5 h-5 text-white sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-white sm:text-base">Sistem Presensi AI</p>
-                                <p class="text-xs text-slate-400">Face Recognition System</p>
-                            </div>
-                        </div>
-
-                        <!-- Navigation -->
-                        <div class="flex items-center gap-4 text-sm sm:gap-6 sm:text-base">
-                            <a href="#presensi-section" class="transition-colors text-slate-300 hover:text-white">
-                                Presensi
-                            </a>
-                            <a href="#about-section" class="transition-colors text-slate-300 hover:text-white">
-                                Tentang
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="my-6 border-t border-slate-700"></div>
-
                     <!-- Copyright -->
                     <div class="text-center">
                         <p class="mb-2 text-sm text-slate-400 sm:text-base">
-                            © 2024 <span class="font-semibold text-white">Universitas Muhammadiyah Yogyakarta</span>
+                            © {{ now()->year }} <span class="font-semibold text-white">Universitas Muhammadiyah Yogyakarta</span>
                         </p>
                         <p class="text-xs text-slate-500 sm:text-sm">
                             Program Studi Teknologi Informasi - AI & Robotics Research Group
